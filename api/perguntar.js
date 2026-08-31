@@ -92,33 +92,41 @@ Regras:
 Trechos do documento:
 ${contexto}`;
 
-    const respostaAPI = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-5',
-        max_tokens: 700,
-        system: promptSistema,
-        messages: [{ role: 'user', content: pergunta }]
-      })
-    });
+    const modeloGemini = 'gemini-2.5-flash';
+    const respostaAPI = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${modeloGemini}:generateContent`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': process.env.GEMINI_API_KEY
+        },
+        body: JSON.stringify({
+          system_instruction: {
+            parts: [{ text: promptSistema }]
+          },
+          contents: [
+            { role: 'user', parts: [{ text: pergunta }] }
+          ],
+          generationConfig: {
+            maxOutputTokens: 700
+          }
+        })
+      }
+    );
 
     if (!respostaAPI.ok) {
       const detalhe = await respostaAPI.text();
-      console.error('Erro da API Anthropic:', detalhe);
+      console.error('Erro da API Gemini:', detalhe);
       res.status(502).json({ erro: 'Erro ao consultar o modelo.' });
       return;
     }
 
     const dadosAPI = await respostaAPI.json();
-    const textoResposta = dadosAPI.content
-      .filter((bloco) => bloco.type === 'text')
-      .map((bloco) => bloco.text)
-      .join('\n');
+    const textoResposta = (dadosAPI.candidates?.[0]?.content?.parts || [])
+      .map((parte) => parte.text || '')
+      .join('\n')
+      .trim() || 'Não foi possível gerar uma resposta a partir deste trecho.';
 
     res.status(200).json({
       resposta: textoResposta,
