@@ -11,8 +11,18 @@ const STOPWORDS = new Set([
   'nos','nas','para','com','por','que','se','é','sua','seu','suas','seus',
   'ao','aos','à','às','como','mais','mas','ou','já','também','muito','pode',
   'foi','são','ser','está','estão','isso','este','esta','esse','essa','pelo',
-  'pela','entre','sobre','quando','onde','qual','quais','não'
+  'pela','entre','sobre','quando','onde','qual','quais','não',
+  // termos que aparecem tanto no documento que não ajudam a diferenciar trechos
+  'brasil','brasileira','brasileiro','sonhos','plano','projeto','projetos',
+  'governo','nacional','nossa','nosso'
 ]);
+
+function pareceSumario(chunk) {
+  // Trechos de sumário/índice têm muitas sequências de pontos (".......")
+  // ou números de página soltos — não ajudam a responder perguntas.
+  const pontosSeguidos = (chunk.match(/\.{4,}/g) || []).length;
+  return pontosSeguidos >= 2;
+}
 
 let baseCache = null;
 
@@ -36,9 +46,11 @@ function tokenizar(texto) {
 
 function buscarTrechosRelevantes(pergunta, chunks, topK = 4) {
   const termosPergunta = tokenizar(pergunta);
-  if (termosPergunta.length === 0) return chunks.slice(0, topK);
+  const chunksValidos = chunks.filter((chunk) => !pareceSumario(chunk));
 
-  const pontuacoes = chunks.map((chunk, indice) => {
+  if (termosPergunta.length === 0) return chunksValidos.slice(0, topK);
+
+  const pontuacoes = chunksValidos.map((chunk, indice) => {
     const termosChunk = tokenizar(chunk);
     const frequencias = {};
     termosChunk.forEach((t) => { frequencias[t] = (frequencias[t] || 0) + 1; });
@@ -58,7 +70,7 @@ function buscarTrechosRelevantes(pergunta, chunks, topK = 4) {
   return pontuacoes
     .slice(0, topK)
     .filter((p) => p.pontuacao > 0)
-    .map((p) => chunks[p.indice]);
+    .map((p) => chunksValidos[p.indice]);
 }
 
 module.exports = async function handler(req, res) {
@@ -109,7 +121,8 @@ ${contexto}`;
             { role: 'user', parts: [{ text: pergunta }] }
           ],
           generationConfig: {
-            maxOutputTokens: 700
+            maxOutputTokens: 2048,
+            thinkingConfig: { thinkingLevel: 'low' }
           }
         })
       }
