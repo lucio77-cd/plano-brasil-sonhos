@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brasil dos Nossos Sonhos — Explorador do Plano</title>
+  <meta name="description" content="Faça perguntas sobre o conteúdo do plano de governo 'Brasil dos Nossos Sonhos' e receba respostas baseadas no documento original.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topo">
+    <div class="envelope">
+      <p class="rotulo">Plano de governo · leitura assistida por IA</p>
+      <h1>Brasil dos Nossos Sonhos</h1>
+      <p class="subtitulo">
+        Este espaço lê o documento completo do plano de governo e responde suas perguntas
+        com base no que está escrito nele — não é o autor falando, é uma IA explicando o texto.
+      </p>
+    </div>
+  </header>
+
+  <main class="envelope">
+
+    <section class="aviso">
+      <p>
+        As respostas aqui vêm da leitura automática do PDF do plano, não de uma entrevista real.
+        Sempre trechos citados podem ser conferidos no documento original.
+      </p>
+    </section>
+
+    <section class="pergunta-area">
+      <label for="campo-pergunta">O que você quer saber sobre o plano?</label>
+      <div class="linha-input">
+        <input
+          type="text"
+          id="campo-pergunta"
+          placeholder="Ex.: o que o plano propõe para a educação?"
+          autocomplete="off"
+        >
+        <button id="botao-perguntar">Perguntar</button>
+      </div>
+      <div class="sugestoes">
+        <button class="chip" data-pergunta="O que o plano propõe para a saúde emocional?">saúde emocional</button>
+        <button class="chip" data-pergunta="Como funciona o projeto Brasil Oásis?">Brasil Oásis</button>
+        <button class="chip" data-pergunta="O que o plano diz sobre inteligência artificial?">inteligência artificial</button>
+        <button class="chip" data-pergunta="Quais são as propostas para as mulheres?">mulheres</button>
+      </div>
+    </section>
+
+    <section id="area-resposta" class="area-resposta" hidden>
+      <div id="carregando" class="carregando" hidden>Lendo o documento…</div>
+      <div id="resposta-texto" class="resposta-texto"></div>
+      <div id="trechos-citados" class="trechos-citados"></div>
+    </section>
+
+    <section id="historico" class="historico"></section>
+
+  </main>
+
+  <footer class="rodape envelope">
+    <p>Fonte: PDF "Brasil dos Nossos Sonhos". Respostas geradas por IA a partir de trechos do documento — podem conter imprecisões.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
