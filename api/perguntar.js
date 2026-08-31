@@ -26,6 +26,28 @@ function pareceSumario(chunk) {
 
 let baseCache = null;
 
+// Controle simples de limite de uso: evita que a cota da API se esgote
+// se o link circular muito. Fica na memória da função — não é perfeito
+// (reseta quando a Vercel reinicia a instância), mas segura bem picos de uso.
+const historicoRequisicoes = new Map();
+const LIMITE_PERGUNTAS = 8;
+const JANELA_MS = 60 * 1000; // 1 minuto
+
+function estaDentroDoLimite(identificador) {
+  const agora = Date.now();
+  const registros = (historicoRequisicoes.get(identificador) || [])
+    .filter((timestamp) => agora - timestamp < JANELA_MS);
+
+  if (registros.length >= LIMITE_PERGUNTAS) {
+    historicoRequisicoes.set(identificador, registros);
+    return false;
+  }
+
+  registros.push(agora);
+  historicoRequisicoes.set(identificador, registros);
+  return true;
+}
+
 function carregarBase() {
   if (baseCache) return baseCache;
   const caminho = path.join(process.cwd(), 'data', 'base_conhecimento.json');
@@ -83,6 +105,18 @@ module.exports = async function handler(req, res) {
 
   if (!pergunta || typeof pergunta !== 'string' || !pergunta.trim()) {
     res.status(400).json({ erro: 'Envie uma pergunta.' });
+    return;
+  }
+
+  if (pergunta.length > 300) {
+    res.status(400).json({ erro: 'Pergunta muito longa. Tente resumir em até 300 caracteres.' });
+    return;
+  }
+
+  const identificador = (req.headers['x-forwarded-for'] || 'desconhecido').split(',')[0].trim();
+
+  if (!estaDentroDoLimite(identificador)) {
+    res.status(429).json({ erro: 'Muitas perguntas em pouco tempo. Espere um minuto e tente de novo.' });
     return;
   }
 
