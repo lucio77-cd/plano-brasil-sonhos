@@ -92,7 +92,7 @@ Regras:
 Trechos do documento:
 ${contexto}`;
 
-    const modeloGemini = 'gemini-2.5-flash';
+    const modeloGemini = 'gemini-3.6-flash';
     const respostaAPI = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${modeloGemini}:generateContent`,
       {
