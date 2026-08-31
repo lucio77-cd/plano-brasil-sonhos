@@ -1,0 +1,9 @@
+{
+  "name": "plano-brasil-sonhos",
+  "version": "1.0.0",
+  "description": "Site que responde perguntas sobre o plano de governo Brasil dos Nossos Sonhos, com base no PDF original.",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

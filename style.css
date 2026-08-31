@@ -1,0 +1,233 @@
+:root {
+  --papel: #eef0ea;
+  --papel-alt: #e4e7de;
+  --tinta: #1b2430;
+  --tinta-suave: #4a5568;
+  --teal: #1f6f63;
+  --teal-escuro: #164f46;
+  --ouro: #a9821c;
+  --roxo: #4b2e73;
+  --linha: #c7ccbd;
+  --fonte-titulo: "Source Serif 4", Georgia, serif;
+  --fonte-corpo: "IBM Plex Sans", -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte-corpo);
+  line-height: 1.55;
+  font-size: 16px;
+}
+
+.envelope {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.topo {
+  padding: 64px 0 40px;
+  border-bottom: 1px solid var(--linha);
+}
+
+.rotulo {
+  font-family: var(--fonte-corpo);
+  font-size: 0.9rem;
+  color: var(--teal-escuro);
+  margin: 0 0 12px;
+}
+
+h1 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0 0 16px;
+  line-height: 1.1;
+  color: var(--tinta);
+}
+
+.subtitulo {
+  font-size: 1.05rem;
+  color: var(--tinta-suave);
+  max-width: 56ch;
+  margin: 0;
+}
+
+/* ---------- Aviso ---------- */
+
+.aviso {
+  margin-top: 32px;
+  padding: 16px 20px;
+  background: var(--papel-alt);
+  border-left: 3px solid var(--ouro);
+}
+
+.aviso p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Área de pergunta ---------- */
+
+.pergunta-area {
+  margin-top: 48px;
+}
+
+.pergunta-area label {
+  display: block;
+  font-family: var(--fonte-titulo);
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+.linha-input {
+  display: flex;
+  gap: 10px;
+}
+
+#campo-pergunta {
+  flex: 1;
+  padding: 14px 16px;
+  font-size: 1rem;
+  font-family: var(--fonte-corpo);
+  border: 1px solid var(--tinta);
+  background: #fff;
+  color: var(--tinta);
+}
+
+#campo-pergunta:focus {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+#botao-perguntar {
+  padding: 14px 22px;
+  font-size: 1rem;
+  font-family: var(--fonte-corpo);
+  font-weight: 500;
+  background: var(--teal-escuro);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#botao-perguntar:hover { background: var(--teal); }
+#botao-perguntar:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+#botao-perguntar:disabled { background: var(--tinta-suave); cursor: wait; }
+
+.sugestoes {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  font-family: var(--fonte-corpo);
+  font-size: 0.85rem;
+  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid var(--linha);
+  color: var(--tinta-suave);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--teal);
+  color: var(--teal-escuro);
+}
+
+/* ---------- Área de resposta ---------- */
+
+.area-resposta {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--linha);
+}
+
+.carregando {
+  font-style: italic;
+  color: var(--tinta-suave);
+}
+
+.resposta-texto {
+  font-size: 1.05rem;
+  white-space: pre-wrap;
+}
+
+.trechos-citados {
+  margin-top: 24px;
+}
+
+.trechos-citados h3 {
+  font-family: var(--fonte-corpo);
+  font-size: 0.85rem;
+  text-transform: none;
+  color: var(--tinta-suave);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.trecho {
+  padding: 14px 16px;
+  background: var(--papel-alt);
+  border-left: 3px solid var(--teal);
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+  margin-bottom: 10px;
+}
+
+/* ---------- Histórico ---------- */
+
+.historico {
+  margin-top: 40px;
+}
+
+.item-historico {
+  padding: 24px 0;
+  border-top: 1px solid var(--linha);
+}
+
+.item-historico .pergunta-feita {
+  font-family: var(--fonte-titulo);
+  font-size: 1.15rem;
+  color: var(--roxo);
+  margin: 0 0 10px;
+}
+
+/* ---------- Rodapé ---------- */
+
+.rodape {
+  margin-top: 64px;
+  padding: 24px 24px 48px;
+  border-top: 1px solid var(--linha);
+}
+
+.rodape p {
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+  margin: 0;
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 520px) {
+  .linha-input { flex-direction: column; }
+  .topo { padding: 40px 0 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
