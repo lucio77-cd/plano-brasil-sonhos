@@ -23,6 +23,8 @@ body {
   font-family: var(--fonte-corpo);
   line-height: 1.55;
   font-size: 16px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .envelope {
@@ -186,6 +188,9 @@ h1 {
   font-size: 0.9rem;
   color: var(--tinta-suave);
   margin-bottom: 10px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 /* ---------- Histórico ---------- */
