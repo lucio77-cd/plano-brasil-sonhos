@@ -26,6 +26,10 @@ async function perguntar(pergunta) {
     });
 
     if (!resposta.ok) {
+      if (resposta.status === 429) {
+        const dadosErro = await resposta.json().catch(() => ({}));
+        throw new Error(dadosErro.erro || 'Muitas perguntas em pouco tempo.');
+      }
       throw new Error(`Erro do servidor: ${resposta.status}`);
     }
 
@@ -51,7 +55,9 @@ async function perguntar(pergunta) {
 
   } catch (erro) {
     carregando.hidden = true;
-    respostaTexto.textContent = 'Não foi possível obter uma resposta agora. Tente novamente em instantes.';
+    respostaTexto.textContent = erro.message && erro.message.includes('Muitas perguntas')
+      ? erro.message
+      : 'Não foi possível obter uma resposta agora. Tente novamente em instantes.';
     console.error(erro);
   } finally {
     botaoPerguntar.disabled = false;
